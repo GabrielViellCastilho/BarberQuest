@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="pt">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BarberQuest</title>
+    <link rel="shortcut icon" type="image/png" href="static/images/logo.png">
+    <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{.CSS}}">
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg primaryColor sticky-top" data-bs-theme="dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">
+            <img src="static/images/logo.png" alt="logo" width="80cm" height="80cm">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse " id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 custom-spacing">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/">Home</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link active" aria-current="page" href="/appointment">Agendar</a>
+                </li>
+            </ul>
+            <center>
+                <button id="loginButton" type="button" class="btn btn-outline-light" data-bs-toggle="modal"
+                        data-bs-target="#modalLogin">Login
+                </button>
+
+                <button id="profileButton" class="btn btn-outline-light" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasExample" aria-controls="offcanvasExample" style="display: none">
+                    Perfil
+                </button>
+
+            </center>
+            </strong>
+        </div>
+    </div>
+</nav>
+
+<div class="main-content">
+    <div class="container mt-5">
+
+        <div class="container primaryColor rounded mt-5 text-center">
+            <h1>Gerenciar Horários Especiais</h1>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-bordered mt-3 table-secondary">
+                <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Hora Início</th>
+                    <th>Hora Fim</th>
+                    <th>Intervalo Início</th>
+                    <th>Intervalo Fim</th>
+                    <th>Ações</th>
+                </tr>
+                </thead>
+                <tbody id="scheduleTable">
+                <tr>
+                    <td colspan="4" class="text-center" id="loading">Carregando...</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Formulário para adicionar um novo horário especial -->
+    <div class="container primaryColor rounded mt-5 text-center">
+        <h4 class="mt-4">Adicionar Horário Especial</h4>
+    </div>
+
+    <div class="container-fluid">
+    <!-- Formulário para Adicionar Horário Especial -->
+        <form id="specialScheduleForm">
+            <div class="row primaryColor rounded p-2">
+                <div class="col-md-4">
+                    <label>Data:</label>
+                    <input type="date" id="date" class="form-control" required>
+                </div>
+                <div class="col-md-2">
+                    <label>Hora Início:</label>
+                    <input type="time" id="openingTime" class="form-control" required>
+                </div>
+                <div class="col-md-2">
+                    <label>Hora Fim:</label>
+                    <input type="time" id="closedTime" class="form-control" required>
+                </div>
+                <div class="col-md-2">
+                    <label>Início do Intervalo:</label>
+                    <input type="time" id="breakStartTime" class="form-control" required>
+                </div>
+                <div class="col-md-2">
+                    <label>Fim do Intervalo:</label>
+                    <input type="time" id="breakEndTime" class="form-control" required>
+                </div>
+
+                <!-- Checkbox dentro da div dos inputs -->
+                <div class="col-12 d-flex align-items-center mt-3">
+                    <input type="checkbox" id="closedAllDay" class="me-2">
+                    <label for="closedAllDay">Fechado o dia todo</label>
+                </div>
+            </div>
+
+            <!-- Botão centralizado -->
+            <center>
+                <div class="d-flex justify-content-center mt-3 pt-2 pb-2 primaryColor w-50 rounded-2">
+                    <button type="submit" class="btn btn-success w-50">Adicionar</button>
+                </div>
+            </center>
+        </form>
+
+
+    </div>
+</div>
+<br>
+
+<div id="footer-container"></div>
+
+
+<script src="static/bootstrap/js/bootstrap.bundle.min.js" defer></script>
+<script src="{{.JS}}" defer></script>
+
+<script>
+    const jwtToken = localStorage.getItem("jwt_token"); // Pegando JWT do localStorage
+
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        date.setDate(date.getDate() + 1); // Corrige o problema do fuso horário
+        return date.toLocaleDateString("pt-BR"); // Formato dd/mm/yyyy
+    }
+
+
+    function formatTime(timeString) {
+        return timeString.substring(0, 5); // Pega apenas hh:mm
+    }
+
+    async function getAllSpecialSchedules() {
+        try {
+            const response = await fetch(`/getAllSpecialSchedule`, {
+                method: "GET",
+                headers: { "Authorization": `Bearer ${jwtToken}` }
+            });
+
+            if (!response.ok) {
+                if (response.status == 404) {
+                    updateTableWithNoData();
+                    return;
+                }
+                if (response.status == 401) {
+                    isTokenExpired();
+                    return;
+                }
+                throw new Error("Erro ao buscar os horários");
+            }
+
+            const data = await response.json();
+            const table = document.getElementById("scheduleTable");
+
+            // Limpa a tabela antes de adicionar novos dados
+            table.innerHTML = "";
+
+            if (data.length === 0) {
+                updateTableWithNoData();
+                return;
+            }
+
+            data.forEach(schedule => {
+                table.innerHTML += `
+            <tr>
+                <td>${formatDate(schedule.date)}</td>
+                <td>${formatTime(schedule.opening_time)}</td>
+                <td>${formatTime(schedule.closed_time)}</td>
+                <td>${formatTime(schedule.break_start_time)}</td>
+                <td>${formatTime(schedule.break_end_time)}</td>
+                <td>
+                    <button class="btn btn-danger btn-sm" onclick="confirmDelete(${schedule.ID})">Excluir</button>
+                </td>
+            </tr>`;
+            });
+        } catch (error) {
+            showAlert("Erro ao carregar horários: " + error.message);
+        }
+    }
+
+    // Função auxiliar para exibir "Nenhum dado encontrado" e limpar a tabela
+    function updateTableWithNoData() {
+        const table = document.getElementById("scheduleTable");
+        table.innerHTML = `
+        <tr>
+            <td colspan="6" class="text-center">Não há dias encontrados.</td>
+        </tr>`;
+    }
+
+    // Função para excluir um registro
+    async function confirmDelete(scheduleId) {
+        showConfirm("Confirmação","Tem certeza que deseja cancelar esta disponibilidade?",async () => {
+
+            try {
+                const response = await fetch(`/deleteSpecialSchedule/${scheduleId}`, {
+                    method: "DELETE",
+                    headers: {"Authorization": `Bearer ${jwtToken}`}
+                });
+
+                if (!response.ok) {
+                    throw new Error("Erro ao excluir o agendamento.");
+                } else {
+                    showAlert("Excluido com sucesso")
+                }
+
+                // Após exclusão, recarregar a lista
+                getAllSpecialSchedules();
+            } catch (error) {
+                showAlert("Erro ao excluir o agendamento: " + error.message);
+            }
+        })
+    }
+
+    document.getElementById("closedAllDay").addEventListener("change", function () {
+        const openingTimeInput = document.getElementById("openingTime");
+        const closedTimeInput = document.getElementById("closedTime");
+        const breakStartTime = document.getElementById("breakStartTime");
+        const breakEndTime = document.getElementById("breakEndTime");
+
+        if (this.checked) {
+            openingTimeInput.value = "00:00";
+            closedTimeInput.value = "00:00";
+            breakStartTime.value = "00:00";
+            breakEndTime.value = "00:00";
+            openingTimeInput.disabled = true;
+            closedTimeInput.disabled = true;
+            breakStartTime.disabled = true;
+            breakEndTime.disabled = true;
+        } else {
+            openingTimeInput.value = "";
+            closedTimeInput.value = "";
+            breakStartTime.value = "";
+            breakEndTime.value = "";
+            openingTimeInput.disabled = false;
+            closedTimeInput.disabled = false;
+            breakStartTime.disabled = false;
+            breakEndTime.disabled = false;
+        }
+    });
+
+    async function createSpecialSchedule(event) {
+        event.preventDefault();
+        isTokenExpired();
+
+        const dateInput = document.getElementById("date").value;
+        const openingTimeInput = document.getElementById("openingTime").value;
+        const closedTimeInput = document.getElementById("closedTime").value;
+        const breakStartTimeInput = document.getElementById("breakStartTime").value;
+        const breakEndTimeInput = document.getElementById("breakEndTime").value;
+        const closedAllDay = document.getElementById("closedAllDay").checked;
+
+        if (!dateInput) {
+            showAlert("Selecione uma data!", "danger");
+            return;
+        }
+
+        const date = new Date(dateInput).toISOString().split("T")[0];
+        const openingTime = closedAllDay ? "00:00:00" : `${openingTimeInput}:00`;
+        const closedTime = closedAllDay ? "00:00:00" : `${closedTimeInput}:00`;
+        const breakStartTime = closedAllDay ? "00:00:00" : `${breakStartTimeInput}:00`;
+        const breakEndTime = closedAllDay ? "00:00:00" : `${breakEndTimeInput}:00`;
+
+        const requestData = { date, opening_time: openingTime, closed_time: closedTime, break_start_time: breakStartTime, break_end_time: breakEndTime };
+
+        console.log("Enviando dados:", requestData);
+
+        try {
+            const response = await fetch(`/createSpecialSchedule`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${jwtToken}`,
+                },
+                body: JSON.stringify(requestData),
+            });
+
+            if (!response.ok) throw new Error("Erro ao criar horário");
+
+            showAlert("Horário criado com sucesso!", "success");
+            getAllSpecialSchedules();
+            document.getElementById("specialScheduleForm").reset();
+            document.getElementById("openingTime").disabled = false;
+            document.getElementById("closedTime").disabled = false;
+            document.getElementById("breakStartTime").disabled = false;
+            document.getElementById("breakEndTime").disabled = false;
+        } catch (error) {
+            showAlert("Erro: " + error.message, "danger");
+        }
+    }
+
+    // Adicionar evento de submit ao formulário
+    document
+        .getElementById("specialScheduleForm")
+        .addEventListener("submit", createSpecialSchedule);
+
+    // Carrega os horários ao abrir a página
+    getAllSpecialSchedules();
+</script>
+
+
+</body>
+<div id="modals-placeholder"></div>
+
+
+<!-- Offcanvas para Usuário Comum -->
+<div class="offcanvas offcanvas-start primaryColor" data-bs-theme="dark" tabindex="-1" id="offcanvasUser"
+     aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title">Perfil</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <center>
+            <a style="font-size:130%" href="/myProfile" class="link-light "><img
+                        src="static/images/usuario-de-perfil.png" class="me-3">Meu perfil</a>
+            <br>
+            <hr>
+            <a style="font-size:130%" href="/myAppointments" class="link-light "><img
+                        src="static/images/time-and-calendar.png" class="me-3">Meus agendamentos</a>
+            <br>
+            <hr>
+            <a style="font-size:130%" href="/myHistoric" class="link-light "><img src="static/images/relogio.png"
+                                                                                  class="me-3">Meu histórico</a>
+            <br>
+            <hr>
+            <button id="logoutButton" type="button" class="btn btn-outline-danger" onclick="logout()">Sair</button>
+        </center>
+    </div>
+</div>
+
+<!-- Offcanvas para Barbeiro -->
+<div class="offcanvas offcanvas-start primaryColor" data-bs-theme="dark" tabindex="-1" id="offcanvasBarber"
+     aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title">Perfil</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <center>
+            <a style="font-size:130%" href="/myProfile" class="link-light "><img
+                        src="static/images/usuario-de-perfil.png" class="me-3">Meu perfil</a>
+            <br>
+            <hr>
+            <a style="font-size:130%" href="/myAppointmentsBarber" class="link-light "><img
+                        src="static/images/time-and-calendar.png" class="me-3">Meus agendamentos</a>
+            <br>
+            <hr>
+            <a style="font-size:130%" href="/inPersonAppointments" class="link-light "><img
+                        src="static/images/relogio.png" class="me-3">Agendamento presencial</a>
+            <br>
+            <hr>
+            <a style="font-size: 130%" href="/barberAvailability" class="link-light"><img
+                        src="static/images/hair-salon.png" class="me-3">Período de serviço</a>
+            <br>
+            <hr>
+            <a style="font-size: 130%" href="/barberSpecialSchedule" class="link-light"><img
+                        src="static/images/compromisso.png" class="me-3">Disponibilidade Especial</a>
+            <br>
+            <hr>
+            <button id="logoutButton" type="button" class="btn btn-outline-danger" onclick="logout()">Sair</button>
+        </center>
+    </div>
+</div>
+
+<!-- Offcanvas para Administrador -->
+<div class="offcanvas offcanvas-start primaryColor" id="offcanvasAdmin" tabindex="-1" aria-labelledby="offcanvasAdminLabel"
+     data-bs-theme="dark">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasAdminLabel">Painel do Administrador</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <center>
+            <a style="font-size:130%" href="/myProfile" class="link-light "><img
+                        src="static/images/usuario-de-perfil.png" class="me-3">Meu perfil</a>
+            <br>
+            <hr>
+            <a style="font-size:130%" href="/inPersonAppointments" class="link-light "><img
+                        src="static/images/relogio.png" class="me-3">Agendamento presencial</a>
+            <br>
+            <hr>
+            <a style="font-size:130%" href="/appointmentAllBarbers" class="link-light "><img
+                        src="static/images/compromisso.png" class="me-3">Agendamento dos barbeiros</a>
+            <br>
+            <hr>
+            <a style="font-size:130%" href="/service" class="link-light "><img
+                        src="static/images/Designer.png" style="width: 32px" class="me-3">Serviços</a>
+            <br>
+            <hr>
+            <a style="font-size:130%" href="/birthdaysOfTheDay" class="link-light "><img
+                        src="static/images/birthday-and-party.png" style="width: 32px" class="me-3">Aniversariantes</a>
+            <br>
+            <hr>
+            <button id="logoutButton" type="button" class="btn btn-outline-danger" onclick="logout()">Sair</button>
+        </center>
+    </div>
+</div>
+
+
+<!-- Modal de Confirmação -->
+<div class="modal fade" tabindex="-1" role="dialog" id="modalConfirm">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content rounded-4 shadow-lg bg-dark text-white p-4" data-bs-theme="dark">
+
+            <!-- Ícone de confirmação e título -->
+            <div class="d-flex align-items-center justify-content-between">
+                <h5 class="modal-title fw-bold" id="confirmTitle"></h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Fechar"></button>
+            </div>
+
+            <!-- Mensagem de confirmação -->
+            <div class="modal-body text-center">
+                <p id="confirmMessage" class="fs-5"></p>
+            </div>
+
+            <!-- Botões de ação -->
+            <div class="modal-footer d-flex justify-content-center">
+                <button type="button" class="btn btn-outline-light px-4" id="cancelButton" data-bs-dismiss="modal">
+                    Cancelar
+                </button>
+                <button type="button" class="btn btn-outline-success px-4" id="confirmButton">Confirmar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+</html>
+
+<style>
+    html, body {
+        height: 100%; /* Garante que o HTML e o body ocupem toda a altura da tela */
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+    }
+</style>
