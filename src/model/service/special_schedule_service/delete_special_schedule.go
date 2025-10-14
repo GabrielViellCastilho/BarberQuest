@@ -2,8 +2,8 @@ package special_schedule_service
 
 import (
 	"context"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/configuration/logger"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/configuration/rest_err"
+	"github.com/GabrielViellCastilho/BarberQuest/src/configuration/logger"
+	"github.com/GabrielViellCastilho/BarberQuest/src/configuration/rest_err"
 	"go.uber.org/zap"
 )
 

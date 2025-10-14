@@ -1,8 +1,8 @@
 package appointment_controller
 
 import (
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/service/appointment_service"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/service/user_service"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/service/appointment_service"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/service/user_service"
 	"github.com/gin-gonic/gin"
 )
 

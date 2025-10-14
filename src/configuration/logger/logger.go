@@ -1,10 +1,11 @@
 package logger
 
 import (
-	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
 	"os"
 	"strings"
+
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 var (
@@ -15,7 +16,7 @@ var (
 
 func init() {
 	logConfiguration := zap.Config{
-		OutputPaths: []string{getOutputLogs()}, // Onde os logs serão exibidos, aqui no terminal
+		OutputPaths: []string{getOutputLogs()},
 		Level:       zap.NewAtomicLevelAt(getLevelLogs()),
 		Encoding:    "json",
 		EncoderConfig: zapcore.EncoderConfig{

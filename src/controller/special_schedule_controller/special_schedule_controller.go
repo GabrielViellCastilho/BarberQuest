@@ -1,7 +1,7 @@
 package special_schedule_controller
 
 import (
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/service/special_schedule_service"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/service/special_schedule_service"
 	"github.com/gin-gonic/gin"
 )
 

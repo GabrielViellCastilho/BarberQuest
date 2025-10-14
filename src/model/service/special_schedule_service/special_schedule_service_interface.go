@@ -2,10 +2,10 @@ package special_schedule_service
 
 import (
 	"context"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/configuration/rest_err"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/controller/model/response"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/repository/special_schedule"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/special_schedule_domain"
+	"github.com/GabrielViellCastilho/BarberQuest/src/configuration/rest_err"
+	"github.com/GabrielViellCastilho/BarberQuest/src/controller/model/response"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/repository/special_schedule"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/special_schedule_domain"
 )
 
 type specialScheduleDomainService struct {

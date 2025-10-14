@@ -3,11 +3,12 @@ package postgre
 import (
 	"context"
 	"fmt"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/configuration/logger"
-	"github.com/jackc/pgx/v5/pgxpool"
-	"go.uber.org/zap"
 	"os"
 	"time"
+
+	"github.com/GabrielViellCastilho/BarberQuest/src/configuration/logger"
+	"github.com/jackc/pgx/v5/pgxpool"
+	"go.uber.org/zap"
 )
 
 const (
@@ -18,7 +19,7 @@ const (
 	PGDATABASE = "PGDATABASE"
 )
 
-var dbPool *pgxpool.Pool // Variável global para o pool de conexões
+var dbPool *pgxpool.Pool
 
 func ConnectDB() (*pgxpool.Pool, error) {
 	logger.Info("Init ConnectDB", zap.String("journey", "Init Database"))
@@ -45,7 +46,7 @@ func ConnectDB() (*pgxpool.Pool, error) {
 
 	logger.Info("Connected to PostgreSQL", zap.String("journey", "Init Database"))
 
-	dbPool = pool // Salva o pool na variável global
+	dbPool = pool
 	return pool, nil
 }
 

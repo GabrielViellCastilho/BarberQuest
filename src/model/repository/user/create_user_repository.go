@@ -2,8 +2,8 @@ package user
 
 import (
 	"context"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/configuration/rest_err"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/user_domain"
+	"github.com/GabrielViellCastilho/BarberQuest/src/configuration/rest_err"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/user_domain"
 )
 
 func (ur *userRepository) CreateUser(ctx context.Context, userDomain user_domain.UserDomainInterface) (user_domain.UserDomainInterface, *rest_err.RestErr) {

@@ -2,11 +2,11 @@ package barber_service_service
 
 import (
 	"context"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/configuration/logger"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/configuration/rest_err"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/controller/model/response"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/service_domain"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/view"
+	"github.com/GabrielViellCastilho/BarberQuest/src/configuration/logger"
+	"github.com/GabrielViellCastilho/BarberQuest/src/configuration/rest_err"
+	"github.com/GabrielViellCastilho/BarberQuest/src/controller/model/response"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/service_domain"
+	"github.com/GabrielViellCastilho/BarberQuest/src/view"
 	"go.uber.org/zap"
 )
 

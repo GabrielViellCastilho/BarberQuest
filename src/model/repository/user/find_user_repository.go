@@ -2,9 +2,10 @@ package user
 
 import (
 	"context"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/configuration/logger"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/configuration/rest_err"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/user_domain"
+
+	"github.com/GabrielViellCastilho/BarberQuest/src/configuration/logger"
+	"github.com/GabrielViellCastilho/BarberQuest/src/configuration/rest_err"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/user_domain"
 	"github.com/jackc/pgx/v5"
 	"go.uber.org/zap"
 )
@@ -143,14 +144,12 @@ func (ur *userRepository) FindAllBarbers(ctx context.Context) ([]user_domain.Use
 	}
 	defer rows.Close()
 
-	// Iterando sobre as linhas retornadas e populando a lista
 	for rows.Next() {
 		var user struct {
 			ID   int
 			Name string
 		}
 
-		// ✅ Correção: passando os ponteiros (&) para o Scan
 		if err := rows.Scan(&user.ID, &user.Name); err != nil {
 			logger.Error("Error scanning user_domain data", err, zap.String("journey", "findAllBarbers"))
 			return nil, rest_err.NewInternalServerError(err.Error())
@@ -159,7 +158,6 @@ func (ur *userRepository) FindAllBarbers(ctx context.Context) ([]user_domain.Use
 		users = append(users, user)
 	}
 
-	// Verificando se não há resultados
 	if len(users) == 0 {
 		return nil, rest_err.NewNotFoundError("No barbers found")
 	}

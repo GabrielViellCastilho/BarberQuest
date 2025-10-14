@@ -2,10 +2,11 @@ package appointment
 
 import (
 	"context"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/configuration/rest_err"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/appointment_domain"
-	"github.com/jackc/pgx/v5/pgxpool"
 	"time"
+
+	"github.com/GabrielViellCastilho/BarberQuest/src/configuration/rest_err"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/appointment_domain"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type appointmentRepository struct {

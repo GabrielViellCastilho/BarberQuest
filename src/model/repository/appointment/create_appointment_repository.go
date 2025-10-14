@@ -2,9 +2,10 @@ package appointment
 
 import (
 	"context"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/configuration/logger"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/configuration/rest_err"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/appointment_domain"
+
+	"github.com/GabrielViellCastilho/BarberQuest/src/configuration/logger"
+	"github.com/GabrielViellCastilho/BarberQuest/src/configuration/rest_err"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/appointment_domain"
 	"go.uber.org/zap"
 )
 

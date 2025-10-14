@@ -1,7 +1,7 @@
 package service_controller
 
 import (
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/service/barber_service_service"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/service/barber_service_service"
 	"github.com/gin-gonic/gin"
 )
 

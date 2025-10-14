@@ -17,7 +17,7 @@ CREATE TABLE services (
                           id SERIAL PRIMARY KEY,
                           name VARCHAR(100) NOT NULL,
                           price NUMERIC(10, 2) NOT NULL,
-                          duration_minutes INT NOT NULL, -- Duração do serviço em minutos
+                          duration_minutes INT NOT NULL,
                           available BOOL
 );
 
@@ -27,7 +27,7 @@ CREATE TABLE appointments (
      client_name VARCHAR(100) NOT NULL,
      client_contact VARCHAR(11),
      appointment_date TIMESTAMP NOT NULL,
-    barber_id INT REFERENCES users(id) ON DELETE SET NULL, -- Relacionamento com o barbeiro
+    barber_id INT REFERENCES users(id) ON DELETE SET NULL,
     service_id INT REFERENCES services(id) ON DELETE CASCADE,
     completed BOOL
 );
@@ -39,8 +39,8 @@ CREATE TABLE barber_availability (
                                      day_of_week INT CHECK (day_of_week BETWEEN 1 AND 6),
                                      start_time TIME NOT NULL,
                                      end_time TIME NOT NULL,
-                                     break_start_time TIME,  -- ⬅️ Início do intervalo
-                                     break_end_time TIME,    -- ⬅️ Fim do intervalo
+                                     break_start_time TIME,
+                                     break_end_time TIME,
                                      CONSTRAINT valid_time_range CHECK (start_time < end_time),
                                      CONSTRAINT valid_break_time CHECK (
                                          break_start_time IS NULL OR break_end_time IS NULL OR
@@ -57,8 +57,8 @@ CREATE TABLE special_schedule (
     date DATE NOT NULL,
     opening_time TIME,
     closing_time TIME,
-    break_start_time TIME,  -- ⬅️ Início do intervalo
-    break_end_time TIME,    -- ⬅️ Fim do intervalo
+    break_start_time TIME,
+    break_end_time TIME,
     CONSTRAINT unique_barber_day_special UNIQUE (barber_id, date)
     CONSTRAINT valid_break_time_special CHECK (
         break_start_time IS NULL OR break_end_time IS NULL OR

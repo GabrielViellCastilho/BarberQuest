@@ -1,12 +1,12 @@
 package view
 
 import (
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/controller/model/response"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/appointment_domain"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/availability_domain"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/service_domain"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/special_schedule_domain"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/user_domain"
+	"github.com/GabrielViellCastilho/BarberQuest/src/controller/model/response"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/appointment_domain"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/availability_domain"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/service_domain"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/special_schedule_domain"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/user_domain"
 )
 
 func ConvertUserDomainToResponse(domainInterface user_domain.UserDomainInterface) *response.User_Response {

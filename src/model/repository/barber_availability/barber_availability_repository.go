@@ -2,9 +2,9 @@ package barber_availability
 
 import (
 	"context"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/configuration/rest_err"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/availability_domain"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/user_domain"
+	"github.com/GabrielViellCastilho/BarberQuest/src/configuration/rest_err"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/availability_domain"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/user_domain"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 

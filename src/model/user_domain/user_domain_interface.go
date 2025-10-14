@@ -1,6 +1,6 @@
 package user_domain
 
-import "github.com/GabrielViellCastilho/SpartanBarbearia/src/configuration/rest_err"
+import "github.com/GabrielViellCastilho/BarberQuest/src/configuration/rest_err"
 
 type UserDomainInterface interface {
 	EncryptPassword()

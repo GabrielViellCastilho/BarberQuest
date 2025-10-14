@@ -1,8 +1,8 @@
 package appointment_controller
 
 import (
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/configuration/logger"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/configuration/rest_err"
+	"github.com/GabrielViellCastilho/BarberQuest/src/configuration/logger"
+	"github.com/GabrielViellCastilho/BarberQuest/src/configuration/rest_err"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"net/http"

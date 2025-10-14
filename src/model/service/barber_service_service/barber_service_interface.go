@@ -2,10 +2,10 @@ package barber_service_service
 
 import (
 	"context"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/configuration/rest_err"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/controller/model/response"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/repository/baber_service"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/service_domain"
+	"github.com/GabrielViellCastilho/BarberQuest/src/configuration/rest_err"
+	"github.com/GabrielViellCastilho/BarberQuest/src/controller/model/response"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/repository/baber_service"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/service_domain"
 )
 
 type serviceDomainService struct {

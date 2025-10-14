@@ -2,7 +2,7 @@ package user_domain
 
 import (
 	"fmt"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/configuration/rest_err"
+	"github.com/GabrielViellCastilho/BarberQuest/src/configuration/rest_err"
 	"github.com/golang-jwt/jwt/v5"
 	"os"
 	"strings"

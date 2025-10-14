@@ -2,9 +2,10 @@ package special_schedule
 
 import (
 	"context"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/configuration/logger"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/configuration/rest_err"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/special_schedule_domain"
+
+	"github.com/GabrielViellCastilho/BarberQuest/src/configuration/logger"
+	"github.com/GabrielViellCastilho/BarberQuest/src/configuration/rest_err"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/special_schedule_domain"
 	"go.uber.org/zap"
 )
 
@@ -36,7 +37,6 @@ ORDER BY date ASC;
 	}
 	defer rows.Close()
 
-	// Iterando sobre as linhas retornadas e populando a lista
 	for rows.Next() {
 		var specialSchedule struct {
 			ID             int
@@ -55,8 +55,7 @@ ORDER BY date ASC;
 
 		specialSchedules = append(specialSchedules, specialSchedule)
 	}
-
-	// Verificando se não há resultados
+	
 	if len(specialSchedules) == 0 {
 		return nil, rest_err.NewNotFoundError("No special schedules found")
 	}

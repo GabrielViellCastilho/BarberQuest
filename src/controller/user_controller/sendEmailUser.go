@@ -1,11 +1,12 @@
 package user_controller
 
 import (
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/configuration/logger"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/user_domain"
+	"net/http"
+
+	"github.com/GabrielViellCastilho/BarberQuest/src/configuration/logger"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/user_domain"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"net/http"
 )
 
 func (uc *userControllerInterface) SendEmailResetPassword(c *gin.Context) {

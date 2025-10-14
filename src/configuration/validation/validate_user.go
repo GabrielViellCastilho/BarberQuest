@@ -3,7 +3,8 @@ package validation
 import (
 	"encoding/json"
 	"errors"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/configuration/rest_err"
+
+	"github.com/GabrielViellCastilho/BarberQuest/src/configuration/rest_err"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/locales/en"
 	ut "github.com/go-playground/universal-translator"

@@ -4,11 +4,12 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/configuration/logger"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/configuration/rest_err"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/appointment_domain"
-	"go.uber.org/zap"
 	"time"
+
+	"github.com/GabrielViellCastilho/BarberQuest/src/configuration/logger"
+	"github.com/GabrielViellCastilho/BarberQuest/src/configuration/rest_err"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/appointment_domain"
+	"go.uber.org/zap"
 )
 
 func (ar *appointmentRepository) FindAllAppointmentsByDateAndBarberID(ctx context.Context, barberID int, date time.Time) ([]appointment_domain.AppointmentDomainInterface, *rest_err.RestErr) {
@@ -40,7 +41,6 @@ ORDER BY appointment_date::time;
 	}
 	defer rows.Close()
 
-	// Iterando sobre as linhas retornadas e populando a lista
 	for rows.Next() {
 		var appointment struct {
 			ID              int
@@ -61,7 +61,6 @@ ORDER BY appointment_date::time;
 		appointments = append(appointments, appointment)
 	}
 
-	// Verificando se não há resultados
 	if len(appointments) == 0 {
 		return nil, rest_err.NewNotFoundError("No appointments found")
 	}
@@ -71,12 +70,11 @@ ORDER BY appointment_date::time;
 	for _, appointment := range appointments {
 		var userID int
 		if appointment.UserID.Valid {
-			userID = int(appointment.UserID.Int64) // Converte de int64 para int
+			userID = int(appointment.UserID.Int64)
 		} else {
-			userID = 0 // Valor padrão caso seja NULL
+			userID = 0
 		}
 
-		// Passa o userID convertido para a função NewAppointmentDomain
 		app := appointment_domain.NewAppointmentDomain(appointment.ClientName, appointment.ClientContact, appointment.BarberID, appointment.ServiceId, appointment.AppointmentDate, userID, appointment.Completed)
 		app.SetId(appointment.ID)
 		appointmentsDomain = append(appointmentsDomain, app)
@@ -116,7 +114,6 @@ func (ar *appointmentRepository) FindAllAppointmentsByUserID(ctx context.Context
 	}
 	defer rows.Close()
 
-	// Iterando sobre as linhas retornadas e populando a lista
 	for rows.Next() {
 		var appointment struct {
 			ID              int
@@ -136,7 +133,6 @@ func (ar *appointmentRepository) FindAllAppointmentsByUserID(ctx context.Context
 		appointments = append(appointments, appointment)
 	}
 
-	// Verificando se não há resultados
 	if len(appointments) == 0 {
 		return nil, rest_err.NewNotFoundError("No appointments found")
 	}
@@ -183,7 +179,6 @@ func (ar *appointmentRepository) FindAllHistoricAppointmentsByUserID(ctx context
 	}
 	defer rows.Close()
 
-	// Iterando sobre as linhas retornadas e populando a lista
 	for rows.Next() {
 		var appointment struct {
 			ID              int
@@ -203,7 +198,6 @@ func (ar *appointmentRepository) FindAllHistoricAppointmentsByUserID(ctx context
 		appointments = append(appointments, appointment)
 	}
 
-	// Verificando se não há resultados
 	if len(appointments) == 0 {
 		return nil, rest_err.NewNotFoundError("No appointments found")
 	}

@@ -2,14 +2,14 @@ package appointment
 
 import (
 	"context"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/configuration/logger"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/configuration/rest_err"
+	"time"
+
+	"github.com/GabrielViellCastilho/BarberQuest/src/configuration/logger"
+	"github.com/GabrielViellCastilho/BarberQuest/src/configuration/rest_err"
 	"github.com/jackc/pgx/v5"
 	"go.uber.org/zap"
-	"time"
 )
 
-// Struct para representar o período de funcionamento
 type WorkingPeriod struct {
 	StartTime time.Time
 	EndTime   time.Time
@@ -20,13 +20,11 @@ type BreakPeriod struct {
 	EndTime   time.Time
 }
 
-// Struct para representar um agendamento
 type Appointment struct {
 	StartTime time.Time
 	Duration  time.Duration
 }
 
-// Struct para representar um slot de tempo disponível
 type TimeSlot struct {
 	Slot        time.Time
 	IsAvailable bool
@@ -40,7 +38,6 @@ func (ar *appointmentRepository) CheckAvailableSlots(ctx context.Context, barber
 
 	var breakPeriod BreakPeriod
 
-	// Primeiro, busca um horário especial para o barbeiro
 	query := `
 		SELECT opening_time, closing_time,break_start_time,break_end_time
 		FROM special_schedule
@@ -64,7 +61,6 @@ func (ar *appointmentRepository) CheckAvailableSlots(ctx context.Context, barber
 			return nil, nil, nil, nil, rest_err.NewInternalServerError("Error scanning special_schedule")
 		}
 	} else {
-		// Caso não haja horário especial, busca a disponibilidade regular
 		query = `
 			SELECT start_time, end_time ,break_start_time,break_end_time
 			FROM barber_availability 
@@ -82,7 +78,6 @@ func (ar *appointmentRepository) CheckAvailableSlots(ctx context.Context, barber
 		}
 	}
 
-	// Busca os horários agendados e suas durações
 	query = `
 		SELECT a.appointment_date::TIME AS scheduled_time, s.duration_minutes
 		FROM appointments a
@@ -112,7 +107,6 @@ func (ar *appointmentRepository) CheckAvailableSlots(ctx context.Context, barber
 		appointments = append(appointments, appointment)
 	}
 
-	// Obtém a duração do serviço selecionado
 	var durationMinutes int
 	query = `
 		SELECT duration_minutes

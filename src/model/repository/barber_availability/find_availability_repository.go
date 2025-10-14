@@ -2,9 +2,10 @@ package barber_availability
 
 import (
 	"context"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/configuration/logger"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/configuration/rest_err"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/availability_domain"
+
+	"github.com/GabrielViellCastilho/BarberQuest/src/configuration/logger"
+	"github.com/GabrielViellCastilho/BarberQuest/src/configuration/rest_err"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/availability_domain"
 	"github.com/jackc/pgx/v5"
 	"go.uber.org/zap"
 )
@@ -42,7 +43,6 @@ ORDER BY day_of_week ASC;
 	}
 	defer rows.Close()
 
-	// Iterando sobre as linhas retornadas e populando a lista
 	for rows.Next() {
 		var availability struct {
 			ID             int

@@ -1,7 +1,7 @@
 package email_service
 
 import (
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/configuration/rest_err"
+	"github.com/GabrielViellCastilho/BarberQuest/src/configuration/rest_err"
 	"os"
 )
 

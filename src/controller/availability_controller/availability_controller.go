@@ -1,7 +1,7 @@
 package availability_controller
 
 import (
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/service/availability_service"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/service/availability_service"
 	"github.com/gin-gonic/gin"
 )
 

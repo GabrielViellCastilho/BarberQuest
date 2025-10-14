@@ -1,11 +1,11 @@
 package special_schedule_controller
 
 import (
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/configuration/logger"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/configuration/validation"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/controller/model/request"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/special_schedule_domain"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/user_domain"
+	"github.com/GabrielViellCastilho/BarberQuest/src/configuration/logger"
+	"github.com/GabrielViellCastilho/BarberQuest/src/configuration/validation"
+	"github.com/GabrielViellCastilho/BarberQuest/src/controller/model/request"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/special_schedule_domain"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/user_domain"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"net/http"

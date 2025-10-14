@@ -2,27 +2,27 @@ package main
 
 import (
 	"fmt"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/configuration/database/postgre"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/controller/appointment_controller"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/controller/availability_controller"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/controller/routes"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/controller/service_controller"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/controller/special_schedule_controller"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/controller/user_controller"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/repository/appointment"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/repository/baber_service"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/repository/barber_availability"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/repository/special_schedule"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/repository/user"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/service/appointment_service"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/service/availability_service"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/service/barber_service_service"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/service/special_schedule_service"
-	"github.com/GabrielViellCastilho/SpartanBarbearia/src/model/service/user_service"
+	"log"
+
+	"github.com/GabrielViellCastilho/BarberQuest/src/configuration/database/postgre"
+	"github.com/GabrielViellCastilho/BarberQuest/src/controller/appointment_controller"
+	"github.com/GabrielViellCastilho/BarberQuest/src/controller/availability_controller"
+	"github.com/GabrielViellCastilho/BarberQuest/src/controller/routes"
+	"github.com/GabrielViellCastilho/BarberQuest/src/controller/service_controller"
+	"github.com/GabrielViellCastilho/BarberQuest/src/controller/special_schedule_controller"
+	"github.com/GabrielViellCastilho/BarberQuest/src/controller/user_controller"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/repository/appointment"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/repository/baber_service"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/repository/barber_availability"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/repository/special_schedule"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/repository/user"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/service/appointment_service"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/service/availability_service"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/service/barber_service_service"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/service/special_schedule_service"
+	"github.com/GabrielViellCastilho/BarberQuest/src/model/service/user_service"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
-	"log"
-	"net/http"
 )
 
 func main() {
@@ -67,27 +67,9 @@ func main() {
 	controller4 := appointment_controller.NewAppointmentController(service4, service)
 
 	routes.InitAppointmentsRoutes(&router.RouterGroup, controller4)
-
-	routes.InitTemplates(router)
-
+	
 	if err := router.Run("0.0.0.0:8080"); err != nil {
 		log.Fatal(err)
 	}
 
-}
-
-func t() {
-	// Configurando o diretório de arquivos estáticos
-	fs := http.FileServer(http.Dir("./public"))
-
-	// Rota para servir os arquivos estáticos
-	http.Handle("/", fs)
-
-	// Mensagem de inicialização do servidor
-	log.Println("Servidor iniciado em http://0.0.0.0:8080")
-
-	// Escutando conexões no IP 0.0.0.0 na porta 8080
-	if err := http.ListenAndServe("0.0.0.0:8080", nil); err != nil {
-		log.Fatal(err)
-	}
 }
