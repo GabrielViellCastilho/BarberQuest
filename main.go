@@ -67,7 +67,9 @@ func main() {
 	controller4 := appointment_controller.NewAppointmentController(service4, service)
 
 	routes.InitAppointmentsRoutes(&router.RouterGroup, controller4)
-	
+
+	routes.InitTemplates(router)
+
 	if err := router.Run("0.0.0.0:8080"); err != nil {
 		log.Fatal(err)
 	}

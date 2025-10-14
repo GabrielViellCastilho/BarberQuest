@@ -1,6 +1,11 @@
 package routes
 
 import (
+	"fmt"
+	"net/http"
+	"os"
+	"path/filepath"
+
 	"github.com/GabrielViellCastilho/BarberQuest/src/controller/appointment_controller"
 	"github.com/GabrielViellCastilho/BarberQuest/src/controller/availability_controller"
 	"github.com/GabrielViellCastilho/BarberQuest/src/controller/service_controller"
@@ -60,4 +65,110 @@ func InitAppointmentsRoutes(r *gin.RouterGroup, ac appointment_controller.Appoin
 	r.GET("/checkAvailableSlots/:barberId/:serviceId/:date", ac.CheckAvailableSlots)
 	r.DELETE("/deleteAppointments/:appointmentId", ac.DeleteAppointmentByIdAndUserId)
 	r.DELETE("/deleteBarberAppointments/:appointmentId", ac.DeleteAppointmentByIdAndBarberId)
+}
+
+func getTimestampedFile(filePath string) string {
+	fileInfo, err := os.Stat(filePath)
+	if err != nil {
+		return filePath
+	}
+	timestamp := fileInfo.ModTime().Unix()
+	return fmt.Sprintf("/static/%s?v=%d", filepath.Base(filePath), timestamp)
+}
+
+func InitTemplates(r *gin.Engine) {
+	r.LoadHTMLGlob("src/view/templates/*.html")
+
+	r.Static("/static", "src/view/templates/static")
+
+	r.GET("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.html", gin.H{
+			"CSS": getTimestampedFile("src/view/templates/static/styles.css"),
+			"JS":  getTimestampedFile("src/view/templates/static/index.js"),
+		})
+	})
+
+	r.GET("/appointment", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "appointment.html", gin.H{
+			"CSS": getTimestampedFile("src/view/templates/static/styles.css"),
+			"JS":  getTimestampedFile("src/view/templates/static/index.js"),
+		})
+	})
+
+	r.GET("/myAppointments", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "myAppointments.html", gin.H{
+			"CSS": getTimestampedFile("src/view/templates/static/styles.css"),
+			"JS":  getTimestampedFile("src/view/templates/static/index.js"),
+		})
+	})
+
+	r.GET("/myAppointmentsBarber", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "myAppointmentsBarber.html", gin.H{
+			"CSS": getTimestampedFile("src/view/templates/static/styles.css"),
+			"JS":  getTimestampedFile("src/view/templates/static/index.js"),
+		})
+	})
+
+	r.GET("/myHistoric", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "historicAppointments.html", gin.H{
+			"CSS": getTimestampedFile("src/view/templates/static/styles.css"),
+			"JS":  getTimestampedFile("src/view/templates/static/index.js"),
+		})
+	})
+
+	r.GET("/myProfile", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "myProfile.html", gin.H{
+			"CSS": getTimestampedFile("src/view/templates/static/styles.css"),
+			"JS":  getTimestampedFile("src/view/templates/static/index.js"),
+		})
+	})
+
+	r.GET("/inPersonAppointments", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "inPersonAppointment.html", gin.H{
+			"CSS": getTimestampedFile("src/view/templates/static/styles.css"),
+			"JS":  getTimestampedFile("src/view/templates/static/index.js"),
+		})
+	})
+
+	r.GET("/barberAvailability", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "barberAvailability.html", gin.H{
+			"CSS": getTimestampedFile("src/view/templates/static/styles.css"),
+			"JS":  getTimestampedFile("src/view/templates/static/index.js"),
+		})
+	})
+
+	r.GET("/barberSpecialSchedule", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "specialSchedule.html", gin.H{
+			"CSS": getTimestampedFile("src/view/templates/static/styles.css"),
+			"JS":  getTimestampedFile("src/view/templates/static/index.js"),
+		})
+	})
+
+	r.GET("/appointmentAllBarbers", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "appointmentAllBarbers.html", gin.H{
+			"CSS": getTimestampedFile("src/view/templates/static/styles.css"),
+			"JS":  getTimestampedFile("src/view/templates/static/index.js"),
+		})
+	})
+
+	r.GET("/service", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "service.html", gin.H{
+			"CSS": getTimestampedFile("src/view/templates/static/styles.css"),
+			"JS":  getTimestampedFile("src/view/templates/static/index.js"),
+		})
+	})
+
+	r.GET("/birthdaysOfTheDay", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "birthdaysOfTheDay.html", gin.H{
+			"CSS": getTimestampedFile("src/view/templates/static/styles.css"),
+			"JS":  getTimestampedFile("src/view/templates/static/index.js"),
+		})
+	})
+
+	r.GET("/updatePassword/:token", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "update_password.html", gin.H{
+			"CSS": getTimestampedFile("src/view/templates/static/styles.css"),
+			"JS":  getTimestampedFile("src/view/templates/static/index.js"),
+		})
+	})
 }
