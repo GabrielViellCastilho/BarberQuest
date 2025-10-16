@@ -1,6 +1,8 @@
 package user_controller
 
 import (
+	"net/http"
+
 	"github.com/GabrielViellCastilho/BarberQuest/src/configuration/logger"
 	"github.com/GabrielViellCastilho/BarberQuest/src/configuration/rest_err"
 	"github.com/GabrielViellCastilho/BarberQuest/src/configuration/validation"
@@ -8,7 +10,6 @@ import (
 	"github.com/GabrielViellCastilho/BarberQuest/src/model/user_domain"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"net/http"
 )
 
 func (uc *userControllerInterface) CreateUser(c *gin.Context) {
@@ -101,4 +102,20 @@ func (uc *userControllerInterface) CreateCustomerUser(c *gin.Context) {
 
 	c.Header("Authorization", jwt)
 	c.JSON(http.StatusCreated, ur)
+}
+
+func (uc *userControllerInterface) CreateAdminIfNotExists() {
+	logger.Info("Init CreateAdminIfNotExists controller",
+		zap.String("journey", "createAdminIfNotExists"))
+
+	err := uc.service.CreateAdminIfNotExists()
+	if err != nil {
+		logger.Error("Error CreateAdminIfNotExists ", err,
+			zap.String("journey", "createAdminIfNotExists"))
+		return
+	}
+
+	logger.Info("Admin creation checked successfully",
+		zap.String("journey", "createAdminIfNotExists"))
+
 }

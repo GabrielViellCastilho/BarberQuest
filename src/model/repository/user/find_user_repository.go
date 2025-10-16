@@ -231,3 +231,55 @@ func (ur *userRepository) FindAllUsersByDateOfBirth(ctx context.Context, dateOfB
 
 	return usersDomain, nil
 }
+
+func (ur *userRepository) FindUsersByRole(role string) ([]user_domain.UserDomainInterface, *rest_err.RestErr) {
+	logger.Info("Init findUsersByRole repository",
+		zap.String("journey", "findUsersByRole"))
+
+	query := `
+		SELECT id, email, name, role, cellphone
+		FROM users
+		WHERE role = $1;
+	`
+
+	ctx := context.Background()
+
+	rows, err := ur.databaseConection.Query(ctx, query, role)
+	if err != nil {
+		logger.Error("Error querying users by role", err, zap.String("journey", "findUsersByRole"))
+		return nil, rest_err.NewInternalServerError(err.Error())
+	}
+	defer rows.Close()
+
+	var users []user_domain.UserDomainInterface
+
+	for rows.Next() {
+		var u struct {
+			ID        int
+			Email     string
+			Name      string
+			Role      string
+			Cellphone string
+		}
+
+		if err := rows.Scan(&u.ID, &u.Email, &u.Name, &u.Role, &u.Cellphone); err != nil {
+			logger.Error("Error scanning user row", err, zap.String("journey", "findUsersByRole"))
+			return nil, rest_err.NewInternalServerError(err.Error())
+		}
+
+		domainUser := user_domain.NewUserDomain(u.Email, "", u.Name, u.Role, u.Cellphone)
+		domainUser.SetID(u.ID)
+
+		users = append(users, domainUser)
+	}
+
+	if len(users) == 0 {
+		return nil, rest_err.NewNotFoundError("no users found with the specified role")
+	}
+
+	logger.Info("Successful findUsersByRole repository",
+		zap.String("journey", "findUsersByRole"),
+		zap.Int("usersFound", len(users)))
+
+	return users, nil
+}

@@ -2,6 +2,7 @@ package user_service
 
 import (
 	"context"
+
 	"github.com/GabrielViellCastilho/BarberQuest/src/configuration/rest_err"
 	"github.com/GabrielViellCastilho/BarberQuest/src/controller/model/response"
 	"github.com/GabrielViellCastilho/BarberQuest/src/model/repository/user"
@@ -20,6 +21,7 @@ type userDomainService struct {
 
 type UserDomainService interface {
 	CreateUser(ctx context.Context, userDomain user2.UserDomainInterface) (*response.User_Response, *rest_err.RestErr)
+	CreateAdminIfNotExists() *rest_err.RestErr
 	UpdateUser(ctx context.Context, userDomain user2.UserDomainInterface) *rest_err.RestErr
 	FindUserByEmail(ctx context.Context, email string) (*response.User_Response, *rest_err.RestErr)
 	FindUserById(ctx context.Context, id int) (*response.User_Response, *rest_err.RestErr)

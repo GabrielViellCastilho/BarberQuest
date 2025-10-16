@@ -59,12 +59,12 @@ CREATE TABLE special_schedule (
     closing_time TIME,
     break_start_time TIME,
     break_end_time TIME,
-    CONSTRAINT unique_barber_day_special UNIQUE (barber_id, date)
+    CONSTRAINT unique_barber_day_special UNIQUE (barber_id, date),
     CONSTRAINT valid_break_time_special CHECK (
         break_start_time IS NULL OR break_end_time IS NULL OR
         break_start_time = '00:00:00' OR break_end_time = '00:00:00' OR
         (break_start_time >= opening_time AND break_end_time <= closing_time AND break_start_time < break_end_time)
-        ),
+        )
 );
 
 

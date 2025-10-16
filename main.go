@@ -41,6 +41,7 @@ func main() {
 	ur := user.NewUserRepository(conn)
 	service := user_service.NewUserDomainService(ur)
 	controller := user_controller.NewUserController(service)
+	controller.CreateAdminIfNotExists()
 
 	routes.InitUserRoutes(&router.RouterGroup, controller)
 

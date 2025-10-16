@@ -18,6 +18,7 @@ func NewUserController(service user_service.UserDomainService) UserControllerInt
 type UserControllerInterface interface {
 	CreateUser(c *gin.Context)
 	CreateCustomerUser(c *gin.Context)
+	CreateAdminIfNotExists()
 	DeleteUser(c *gin.Context)
 	DeleteMyUser(c *gin.Context)
 	FindUserById(c *gin.Context)
