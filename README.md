@@ -65,4 +65,5 @@ Sistema de agendamento online para barbearias, permitindo gerenciar clientes, ho
    ```bash
    go run main.go
    ```
+5. No navegador, acesse [http://localhost:8080/](http://localhost:8080/)
 
